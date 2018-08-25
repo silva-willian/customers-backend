@@ -1,0 +1,53 @@
+plugins {
+    id 'org.springframework.boot' version '1.5.9.RELEASE'
+    id 'io.franzbecker.gradle-lombok' version '1.11'
+}
+
+apply plugin: 'java'
+
+group = 'com.sre.backend'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+bootRun {
+    systemProperties = System.properties
+}
+
+
+ext {
+    springBootVersion = '1.5.9.RELEASE'
+    feignVersion = '9.5.1'
+    springCloudVersion = '1.0.2.RELEASE'
+    guavaVersion = "18.0"
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+	compile "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '1.5.9.RELEASE'
+
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
+    compile "ch.qos.logback:logback-access:1.1.11"
+	compile "com.sun.xml.bind:jaxb-impl:2.2.6"
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+	compile "io.springfox:springfox-swagger2:2.7.0"
+	compile "io.springfox:springfox-swagger-ui:2.7.0"
+    compile "org.springframework.boot:spring-boot-starter-web-services"
+	compile "commons-beanutils:commons-beanutils:1.8.3"
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile('org.springframework.boot:spring-boot-starter-hateoas')
+    compile 'br.com.six2six:fixture-factory:3.1.0'
+    compile group: 'com.github.joschi.jackson', name: 'jackson-datatype-threetenbp', version: '2.8.4'
+    compile 'com.internetitem:logback-elasticsearch-appender:1.6'
+    compile "org.flywaydb:flyway-core:4.1.2"
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.4'
+}

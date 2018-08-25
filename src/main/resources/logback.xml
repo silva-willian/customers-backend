@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty scope="context" name="ELK_HOST" source="elk.host"/>
+    <springProperty scope="context" name="ELK_INDEX" source="elk.index"/>
+    <property name="APP_NAME" value="${ELK_INDEX}-${SPRING_PROFILES_ACTIVE}-%d{yyyy-MM-dd}"/>
+
+    <property name="PATTERN"
+              value="%d{yyyy-MM-dd'T'HH:mm:ss.SSSZZ} %magenta([%thread]) %highlight(%-5level)  %logger{26}.%M - %msg%n"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                ${PATTERN}
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ELASTIC" class="com.internetitem.logback.elasticsearch.ElasticsearchAppender">
+        <url>${ELK_HOST}</url>
+        <type>logs</type>
+        <index>${APP_NAME}</index>
+        <errorLoggerName>es</errorLoggerName>
+        <properties>
+            <property>
+                <name>requestId</name>
+                <value>%X{uniqueTrackingNumber}</value>
+            </property>
+            <property>
+                <name>host</name>
+                <value>${HOSTNAME}</value>
+                <allowEmpty>false</allowEmpty>
+            </property>
+            <property>
+                <name>application</name>
+                <value>${APP_NAME}</value>
+            </property>
+            <property>
+                <name>severity</name>
+                <value>%level</value>
+            </property>
+            <property>
+                <name>thread</name>
+                <value>%thread</value>
+            </property>
+            <property>
+                <name>stacktrace</name>
+                <value>%ex</value>
+            </property>
+            <property>
+                <name>logger</name>
+                <value>%logger</value>
+            </property>
+        </properties>
+        <headers>
+            <header>
+                <name>Content-Type</name>
+                <value>application/json</value>
+            </header>
+        </headers>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ELASTIC"/>
+    </root>
+
+</configuration>
