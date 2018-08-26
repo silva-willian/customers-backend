@@ -46,9 +46,7 @@ public class PaginateServiceImplTest {
 
     @Test
     public void test_paginate() {
-        List<Customer> customers = getContent();
-
-        List<Customer> customersFiltered = paginateService.getPage(customers, 0, 10);
+        List<Customer> customersFiltered = paginateService.getPage(getContent(), 0, 10);
         assertNotNull(customersFiltered);
         assertEquals(10, customersFiltered.size());
     }
@@ -56,9 +54,7 @@ public class PaginateServiceImplTest {
 
     @Test
     public void test_partial_paginate() {
-        List<Customer> customers = getContent();
-
-        List<Customer> customersFiltered = paginateService.getPage(customers, 10, 10);
+        List<Customer> customersFiltered = paginateService.getPage(getContent(), 10, 10);
         assertNotNull(customersFiltered);
         assertEquals(2, customersFiltered.size());
     }
