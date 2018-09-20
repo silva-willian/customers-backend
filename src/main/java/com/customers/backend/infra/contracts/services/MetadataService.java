@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface MetadataService {
     Metadata fromList(Integer start, Integer limit, Integer total, List<Customer> list);
+    Metadata fromObject();
 }

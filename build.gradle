@@ -24,6 +24,7 @@ ext {
     feignVersion = '9.5.1'
     springCloudVersion = '1.0.2.RELEASE'
     guavaVersion = "18.0"
+    springfox = "2.7.0"
 }
 
 repositories {
@@ -33,14 +34,14 @@ repositories {
 
 dependencies {
 	compile "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '1.5.9.RELEASE'
-
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version:"${springBootVersion}"
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas', version: "${springBootVersion}"
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
     compile "ch.qos.logback:logback-access:1.1.11"
 	compile "com.sun.xml.bind:jaxb-impl:2.2.6"
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
-	compile "io.springfox:springfox-swagger2:2.7.0"
-	compile "io.springfox:springfox-swagger-ui:2.7.0"
+	compile "io.springfox:springfox-swagger2:${springfox}"
+	compile "io.springfox:springfox-swagger-ui:${springfox}"
     compile "org.springframework.boot:spring-boot-starter-web-services"
 	compile "commons-beanutils:commons-beanutils:1.8.3"
 	testCompile('org.springframework.boot:spring-boot-starter-test')
@@ -50,4 +51,6 @@ dependencies {
     compile 'com.internetitem:logback-elasticsearch-appender:1.6'
     compile "org.flywaydb:flyway-core:4.1.2"
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.4'
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.7'
+
 }

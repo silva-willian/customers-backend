@@ -3,6 +3,7 @@ package com.customers.backend.infra.respositories;
 import com.customers.backend.domain.contracts.repositories.CustomersRepository;
 import com.customers.backend.domain.entities.Customer;
 import com.customers.backend.domain.entities.response.CustomersGetAllResponse;
+import com.customers.backend.domain.entities.response.CustomersGetByIdResponse;
 import com.customers.backend.infra.contracts.services.MetadataService;
 import com.customers.backend.infra.contracts.services.PaginateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Repository
 public class CustomersRepositoryImpl implements CustomersRepository {
@@ -33,10 +32,11 @@ public class CustomersRepositoryImpl implements CustomersRepository {
     }
 
     @Override
-    public CustomersGetAllResponse get(Integer start, Integer limit) {
+    public CustomersGetAllResponse get(Integer start, Integer limit, String sort, String desc) {
 
         List<Customer> customers = null;
-        customers = buildList(jdbcTemplate.queryForList("select * from customers.customer"));
+
+        customers = buildList(jdbcTemplate.queryForList(buildQueryGet(sort, desc)));
 
         List<Customer> customersFiltered = paginateService.getPage(customers, start, limit);
 
@@ -48,6 +48,36 @@ public class CustomersRepositoryImpl implements CustomersRepository {
                 .metadata(metadataService.fromList(start, limit, customers_size, customersFiltered))
                 .results(customersFiltered).build();
 
+    }
+
+    @Override
+    public CustomersGetByIdResponse get(Integer id) {
+
+        Customer customer = buildItem(jdbcTemplate.queryForMap(String.format("select * from customers.customer where id = %s", id)));
+
+        return CustomersGetByIdResponse.builder()
+                .metadata(metadataService.fromObject())
+                .results(customer).build();
+    }
+
+    private String buildQueryGet(String sort, String desc) {
+        String query = "select * from customers.customer";
+
+        if (sort == null || sort == "")
+            return query;
+
+        String sorting = String.format("ORDER BY %s", sort.replace(",", " , "));
+        ;
+
+        if (desc == null || desc == "")
+            return String.format("%s %s", query, sorting);
+
+        String[] desc_itens = desc.split(",");
+
+        for (String desc_item : desc_itens)
+            sorting = sorting.replace(desc_item, desc_item + " DESC");
+
+        return String.format("%s %s", query, sorting);
     }
 
     private List<Customer> buildList(List<Map<String, Object>> listResult) {

@@ -18,4 +18,13 @@ public class MetadataServiceImpl implements MetadataService {
                 .total(total)
                 .type(MetadataType.fromValue("list")).build();
     }
+
+    @Override
+    public Metadata fromObject() {
+        return Metadata.builder()
+                .start(0)
+                .limit(0)
+                .total(0)
+                .type(MetadataType.fromValue("object")).build();
+    }
 }

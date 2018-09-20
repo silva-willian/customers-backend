@@ -1,9 +1,8 @@
 package com.customers.backend.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.Date;
 
 @Data
@@ -17,6 +16,10 @@ public class Customer {
     private String cel_ddd;
     private String cel_number;
     private Date date_birth;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date register_date;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date last_update_date;
 }
